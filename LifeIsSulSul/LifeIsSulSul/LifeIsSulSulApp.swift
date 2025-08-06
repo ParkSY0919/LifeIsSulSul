@@ -6,12 +6,34 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 @main
 struct LifeIsSulSulApp: App {
+    @AppStorage("hasSeenOnboarding") var hasSeenOnboarding = false
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppView(store: Store(initialState: AppFeature.State()) {
+                AppFeature()
+            })
+        }
+    }
+}
+
+struct AppView: View {
+    @Bindable var store: StoreOf<AppFeature>
+    
+    var body: some View {
+        switch store.appState {
+        case .splash:
+            SplashView(store: store.scope(state: \.splashState, action: \.splashAction))
+            
+        case .onboarding:
+            OnboardingView(store: store.scope(state: \.onboardingState, action: \.onboardingAction))
+            
+        case .main:
+            DrinkTrackingView(store: store.scope(state: \.drinkTrackingState, action: \.drinkTrackingAction))
         }
     }
 }
