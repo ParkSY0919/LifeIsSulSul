@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9E4713052E436B9A0000CF24 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 9E4713042E436B9A0000CF24 /* ComposableArchitecture */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		9E47106C2E4210890000CF24 /* LifeIsSulSul.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LifeIsSulSul.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E4713052E436B9A0000CF24 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = LifeIsSulSul;
 			packageProductDependencies = (
+				9E4713042E436B9A0000CF24 /* ComposableArchitecture */,
 			);
 			productName = LifeIsSulSul;
 			productReference = 9E47106C2E4210890000CF24 /* LifeIsSulSul.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 9E4710632E4210890000CF24;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9E4713032E436B9A0000CF24 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9E47106D2E4210890000CF24 /* Products */;
 			projectDirPath = "";
@@ -334,6 +343,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9E4713032E436B9A0000CF24 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.21.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9E4713042E436B9A0000CF24 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9E4713032E436B9A0000CF24 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9E4710642E4210890000CF24 /* Project object */;
 }
