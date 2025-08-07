@@ -2,7 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct OnboardingView: View {
-    let store: StoreOf<OnboardingFeature>
+    @Bindable var store: StoreOf<OnboardingFeature>
     
     var body: some View {
             ZStack {
@@ -11,10 +11,7 @@ struct OnboardingView: View {
                               endPoint: .bottomTrailing)
                     .ignoresSafeArea()
                 
-                TabView(selection: Binding(
-                    get: { store.withState(\.currentStep) },
-                    set: { store.send(.setCurrentStep($0)) }
-                )) {
+                TabView(selection: $store.currentStep.sending(\.setCurrentStep)) {
                     OnboardingStep1(store: store)
                         .tag(0)
                     
@@ -25,7 +22,7 @@ struct OnboardingView: View {
                         .tag(2)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .always))
-                .animation(.spring(response: 0.5, dampingFraction: 0.8), value: store.withState(\.currentStep))
+                .animation(.spring(response: 0.5, dampingFraction: 0.8), value: store.currentStep)
         }
         .onAppear {
             store.send(.onAppear)
@@ -43,15 +40,15 @@ struct OnboardingStep1: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 80, height: 80)
-                        .rotationEffect(.degrees(store.withState(\.animateEmoji) ? -10 : 10))
-                        .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: store.withState(\.animateEmoji))
+                        .rotationEffect(.degrees(store.animateEmoji ? -10 : 10))
+                        .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: store.animateEmoji)
                     
                     ImageLiterals.beer
                         .resizable()
                         .scaledToFit()
                         .frame(width: 80, height: 80)
-                        .rotationEffect(.degrees(store.withState(\.animateEmoji) ? 10 : -10))
-                        .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: store.withState(\.animateEmoji))
+                        .rotationEffect(.degrees(store.animateEmoji ? 10 : -10))
+                        .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: store.animateEmoji)
                 }
                 
                 Text("소주잔과 맥주잔을 클릭하며\n오늘 무슨 종류의 술을 몇병 마셨는지\n표시해봐요")
@@ -69,10 +66,10 @@ struct OnboardingStep2: View {
     var body: some View {
             VStack(spacing: 40) {
                 HStack(spacing: 50) {
-                    BottleView(fillLevel: store.withState(\.sojuLevel), color: .green.opacity(0.6), bottleType: .soju)
+                    BottleView(fillLevel: store.sojuLevel, color: .green.opacity(0.6), bottleType: .soju)
                         .frame(width: 80, height: 200)
                     
-                    BottleView(fillLevel: store.withState(\.beerLevel), color: .yellow.opacity(0.7), bottleType: .beer)
+                    BottleView(fillLevel: store.beerLevel, color: .yellow.opacity(0.7), bottleType: .beer)
                         .frame(width: 80, height: 200)
                 }
                 
@@ -124,7 +121,7 @@ struct OnboardingStep3: View {
                                                    endPoint: .trailing))
                         )
                 }
-                .scaleEffect(store.withState(\.buttonScale))
+                .scaleEffect(store.buttonScale)
                 
                 Spacer()
             }
