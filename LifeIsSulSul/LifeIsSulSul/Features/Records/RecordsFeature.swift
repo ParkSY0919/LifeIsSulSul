@@ -7,6 +7,7 @@ enum SortOrder: String, CaseIterable, Sendable {
 }
 
 struct RecordsFeature: Reducer {
+    @ObservableState
     struct State: Equatable {
         var records: [DrinkRecord] = []
         var sortOrder: SortOrder = .newest
@@ -22,12 +23,15 @@ struct RecordsFeature: Reducer {
         }
     }
     
+    @CasePathable
     enum Action {
         case loadRecords
         case recordsLoaded([DrinkRecord])
         case setSortOrder(SortOrder)
         case deleteRecord(IndexSet)
         case refresh
+        case loadingFailed(Error)
+//        case createTestData // 개발/테스트용
     }
     
     @Dependency(\.drinkRecordService) var drinkRecordService
@@ -36,15 +40,28 @@ struct RecordsFeature: Reducer {
         Reduce { state, action in
             switch action {
             case .loadRecords:
+                print("📱 RecordsFeature - loadRecords 액션 시작")
                 state.isLoading = true
                 
                 return .run { send in
-                    let records = await drinkRecordService.loadRecords()
-                    await send(.recordsLoaded(records))
+                    do {
+                        let records = await drinkRecordService.loadRecords()
+                        print("📱 RecordsFeature - \(records.count)개 레코드 로드됨")
+                        await send(.recordsLoaded(records))
+                    } catch {
+                        print("📱 RecordsFeature - 로딩 실패: \(error)")
+                        await send(.loadingFailed(error))
+                    }
                 }
                 
             case let .recordsLoaded(records):
+                print("📱 RecordsFeature - recordsLoaded: \(records.count)개")
                 state.records = records
+                state.isLoading = false
+                return .none
+                
+            case let .loadingFailed(error):
+                print("📱 RecordsFeature - loadingFailed: \(error)")
                 state.isLoading = false
                 return .none
                 

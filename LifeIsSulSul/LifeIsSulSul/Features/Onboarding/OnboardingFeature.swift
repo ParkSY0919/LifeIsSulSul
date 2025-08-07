@@ -2,6 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct OnboardingFeature: Reducer {
+    @ObservableState
     struct State: Equatable {
         var currentStep = 0
         var hasSeenOnboarding = false
@@ -11,6 +12,7 @@ struct OnboardingFeature: Reducer {
         var beerLevel: CGFloat = 0
     }
     
+    @CasePathable
     enum Action {
         case setCurrentStep(Int)
         case completeOnboarding
