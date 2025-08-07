@@ -5,11 +5,15 @@ protocol DrinkRecordServiceProtocol: Sendable {
     func loadRecords() async -> [DrinkRecord]
     func saveRecord(_ record: DrinkRecord) async
     func saveRecords(_ records: [DrinkRecord]) async
+    func saveTempRecord(_ record: DrinkRecord) async
+    func loadTempRecord() async -> DrinkRecord?
+    func clearTempRecord() async
 }
 
 struct DrinkRecordService: DrinkRecordServiceProtocol {
     private let userDefaults: UserDefaults
     private let recordsKey = "drinkRecords"
+    private let tempRecordKey = "tempDrinkRecord"
     
     init(userDefaults: UserDefaults = .standard) {
         self.userDefaults = userDefaults
@@ -55,6 +59,44 @@ struct DrinkRecordService: DrinkRecordServiceProtocol {
         } catch {
             print("💾 \(#function) - 인코딩 실패: \(error)")
         }
+    }
+    
+    @MainActor
+    func saveTempRecord(_ record: DrinkRecord) async {
+        print("💾 \(#function) - 임시 레코드 저장")
+        
+        do {
+            let encoded = try JSONEncoder().encode(record)
+            userDefaults.set(encoded, forKey: tempRecordKey)
+            print("💾 \(#function) - 임시 저장 성공")
+        } catch {
+            print("💾 \(#function) - 임시 저장 인코딩 실패: \(error)")
+        }
+    }
+    
+    @MainActor
+    func loadTempRecord() async -> DrinkRecord? {
+        print("🔍 \(#function) - 임시 레코드 로드")
+        
+        guard let data = userDefaults.data(forKey: tempRecordKey) else {
+            print("🔍 \(#function) - 임시 레코드 없음")
+            return nil
+        }
+        
+        do {
+            let record = try JSONDecoder().decode(DrinkRecord.self, from: data)
+            print("🔍 \(#function) - 임시 레코드 로드 성공")
+            return record
+        } catch {
+            print("🔍 \(#function) - 임시 레코드 디코딩 실패: \(error)")
+            return nil
+        }
+    }
+    
+    @MainActor
+    func clearTempRecord() async {
+        print("🗑️ \(#function) - 임시 레코드 삭제")
+        userDefaults.removeObject(forKey: tempRecordKey)
     }
 }
 

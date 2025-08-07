@@ -21,17 +21,23 @@ struct LifeIsSulSulApp: App {
 
 struct AppView: View {
     @Bindable var store: StoreOf<AppFeature>
+    @Environment(\.scenePhase) private var scenePhase
     
     var body: some View {
-        switch store.appState {
-        case .splash:
-            SplashView(store: store.scope(state: \.splashState, action: \.splashAction))
-            
-        case .onboarding:
-            OnboardingView(store: store.scope(state: \.onboardingState, action: \.onboardingAction))
-            
-        case .main:
-            DrinkTrackingView(store: store.scope(state: \.drinkTrackingState, action: \.drinkTrackingAction))
+        Group {
+            switch store.appState {
+            case .splash:
+                SplashView(store: store.scope(state: \.splashState, action: \.splashAction))
+                
+            case .onboarding:
+                OnboardingView(store: store.scope(state: \.onboardingState, action: \.onboardingAction))
+                
+            case .main:
+                DrinkTrackingView(store: store.scope(state: \.drinkTrackingState, action: \.drinkTrackingAction))
+            }
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            store.send(.drinkTrackingAction(.scenePhaseChanged(newPhase)))
         }
     }
 }

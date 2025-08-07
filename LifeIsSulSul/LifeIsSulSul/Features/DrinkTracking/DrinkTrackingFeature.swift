@@ -10,9 +10,13 @@ struct DrinkTrackingFeature: Reducer {
         var isTracking = false
         var isPaused = false
         var elapsedTime: TimeInterval = 0
+        var startTime: Date?
+        var pausedTime: TimeInterval = 0
         var hourlyPace: [HourlyRecord] = []
         var currentHourlyPace: CurrentHourlyPace = .empty
         var showRecords = false
+        var lastSaveTime: Date?
+        var backgroundEnterTime: Date?
         
         // 계산된 속성들
         var sojuBottles: Int { sojuShots / 8 }
@@ -41,6 +45,9 @@ struct DrinkTrackingFeature: Reducer {
         case showRecords
         case hideRecords
         case updateCurrentPace
+        case scenePhaseChanged(ScenePhase)
+        case autoSave
+        case calculateElapsedTime
     }
     
     @Dependency(\.drinkRecordService) var drinkRecordService
@@ -68,7 +75,10 @@ struct DrinkTrackingFeature: Reducer {
                 state.isTracking = true
                 state.isPaused = false
                 state.elapsedTime = 0
+                state.startTime = Date()
+                state.pausedTime = 0
                 state.hourlyPace = []
+                state.lastSaveTime = Date()
                 
                 return .run { send in
                     for await _ in self.clock.timer(interval: .seconds(1)) {
@@ -80,11 +90,23 @@ struct DrinkTrackingFeature: Reducer {
             case .stopTracking:
                 state.isTracking = false
                 state.isPaused = true
+                
+                // 정확한 시간 계산
+                if let startTime = state.startTime {
+                    let currentTime = Date()
+                    state.elapsedTime = currentTime.timeIntervalSince(startTime) - state.pausedTime
+                }
+                
                 return .cancel(id: CancelID.timer)
                 
             case .resumeTracking:
+                let pauseStartTime = state.backgroundEnterTime ?? Date()
+                let pauseDuration = Date().timeIntervalSince(pauseStartTime)
+                state.pausedTime += pauseDuration
+                
                 state.isTracking = true
                 state.isPaused = false
+                state.backgroundEnterTime = nil
                 
                 return .run { send in
                     for await _ in self.clock.timer(interval: .seconds(1)) {
@@ -94,13 +116,21 @@ struct DrinkTrackingFeature: Reducer {
                 .cancellable(id: CancelID.timer)
                 
             case .timerTick:
-                guard state.isTracking else { return .none }
+                guard state.isTracking, let startTime = state.startTime else { return .none }
                 
-                state.elapsedTime += 1
+                // 정확한 시간 계산
+                let currentTime = Date()
+                state.elapsedTime = currentTime.timeIntervalSince(startTime) - state.pausedTime
                 
                 // 매 시간마다 hourly pace 기록
                 if Int(state.elapsedTime) % 3600 == 0 && state.elapsedTime > 0 {
                     return .send(.hourlyTick)
+                }
+                
+                // 5분마다 자동 저장
+                if let lastSave = state.lastSaveTime, 
+                   Date().timeIntervalSince(lastSave) >= 300 {
+                    return .send(.autoSave)
                 }
                 
                 return .none
@@ -157,8 +187,12 @@ struct DrinkTrackingFeature: Reducer {
                 state.isTracking = false
                 state.isPaused = false
                 state.elapsedTime = 0
+                state.startTime = nil
+                state.pausedTime = 0
                 state.hourlyPace = []
                 state.currentHourlyPace = .empty
+                state.lastSaveTime = nil
+                state.backgroundEnterTime = nil
                 
                 return .cancel(id: CancelID.timer)
                 
@@ -172,6 +206,52 @@ struct DrinkTrackingFeature: Reducer {
                 
             case .updateCurrentPace:
                 // 현재 진행 중인 시간의 페이스 업데이트
+                return .none
+                
+            case let .scenePhaseChanged(phase):
+                switch phase {
+                case .background:
+                    if state.isTracking {
+                        state.backgroundEnterTime = Date()
+                    }
+                case .active:
+                    if state.isTracking, let backgroundTime = state.backgroundEnterTime {
+                        let backgroundDuration = Date().timeIntervalSince(backgroundTime)
+                        // 백그라운드에서 3분 이상 지났으면 일시정지된 것으로 간주
+                        if backgroundDuration > 180 {
+                            state.pausedTime += backgroundDuration
+                        }
+                        state.backgroundEnterTime = nil
+                    }
+                case .inactive:
+                    break
+                @unknown default:
+                    break
+                }
+                return .none
+                
+            case .autoSave:
+                state.lastSaveTime = Date()
+                
+                let tempRecord = DrinkRecord(
+                    date: Date(),
+                    sojuBottles: state.sojuBottles,
+                    sojuShots: state.sojuShots % 8,
+                    beerBottles: state.beerBottles,
+                    beerGlasses: state.beerGlasses % 4,
+                    somaekGlasses: state.somaekGlasses,
+                    hourlyPace: state.hourlyPace,
+                    totalDuration: state.elapsedTime
+                )
+                
+                return .run { _ in
+                    await drinkRecordService.saveTempRecord(tempRecord)
+                }
+                
+            case .calculateElapsedTime:
+                guard let startTime = state.startTime else { return .none }
+                let currentTime = Date()
+                state.elapsedTime = currentTime.timeIntervalSince(startTime) - state.pausedTime
                 return .none
             }
         }
