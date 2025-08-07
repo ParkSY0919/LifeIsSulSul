@@ -16,6 +16,18 @@ struct DrinkTrackingView: View {
                                 .font(.title3)
                         }
                     }
+                    
+//                    if #available(iOS 16.1, *) {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(action: {
+                                store.send(.toggleLiveActivityPermission)
+                            }) {
+                                Image(systemName: store.withState(\.isLiveActivityEnabled) ? "bell.fill" : "bell.slash")
+                                    .font(.title3)
+                                    .foregroundColor(store.withState(\.isLiveActivityEnabled) ? .green : .gray)
+                            }
+                        }
+//                    }
                 }
                 .navigationTitle("인생이 술술")
                 .navigationBarTitleDisplayMode(.inline)
