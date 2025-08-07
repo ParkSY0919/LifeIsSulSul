@@ -31,7 +31,6 @@ struct RecordsFeature: Reducer {
         case deleteRecord(IndexSet)
         case refresh
         case loadingFailed(Error)
-//        case createTestData // 개발/테스트용
     }
     
     @Dependency(\.drinkRecordService) var drinkRecordService
@@ -44,14 +43,9 @@ struct RecordsFeature: Reducer {
                 state.isLoading = true
                 
                 return .run { send in
-                    do {
-                        let records = await drinkRecordService.loadRecords()
-                        print("📱 RecordsFeature - \(records.count)개 레코드 로드됨")
-                        await send(.recordsLoaded(records))
-                    } catch {
-                        print("📱 RecordsFeature - 로딩 실패: \(error)")
-                        await send(.loadingFailed(error))
-                    }
+                    let records = await drinkRecordService.loadRecords()
+                    print("📱 RecordsFeature - \(records.count)개 레코드 로드됨")
+                    await send(.recordsLoaded(records))
                 }
                 
             case let .recordsLoaded(records):
