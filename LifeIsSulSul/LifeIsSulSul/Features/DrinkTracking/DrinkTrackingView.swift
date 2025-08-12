@@ -216,7 +216,27 @@ struct ControlButtonsSection: View {
     let store: StoreOf<DrinkTrackingFeature>
     
     var body: some View {
-        if !store.withState(\.isTracking) {
+        if store.withState(\.isSaving) {
+            // 저장 중 로딩 UI
+            VStack(spacing: 16) {
+                ProgressView()
+                    .scaleEffect(1.5)
+                    .foregroundColor(.blue)
+                
+                Text("음주 기록을 저장하는 중...")
+                    .font(.headline)
+                    .foregroundColor(.secondary)
+                
+                Text("잠시만 기다려주세요")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.gray.opacity(0.1))
+            )
+        } else if !store.withState(\.isTracking) {
             if store.withState(\.isPaused) {
                 HStack(spacing: 20) {
                     Button(action: {
@@ -231,19 +251,28 @@ struct ControlButtonsSection: View {
                                     .fill(Color.green)
                             )
                     }
+                    .disabled(store.withState(\.isSaving))
                     
                     Button(action: {
                         store.send(.saveRecord)
                     }) {
-                        Text("저장")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(width: 100, height: 50)
-                            .background(
-                                RoundedRectangle(cornerRadius: 25)
-                                    .fill(Color.blue)
-                            )
+                        HStack {
+                            if store.withState(\.isSaving) {
+                                ProgressView()
+                                    .scaleEffect(0.8)
+                                    .foregroundColor(.white)
+                            }
+                            Text("저장")
+                        }
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(width: 100, height: 50)
+                        .background(
+                            RoundedRectangle(cornerRadius: 25)
+                                .fill(Color.blue)
+                        )
                     }
+                    .disabled(store.withState(\.isSaving))
                 }
             } else {
                 Button(action: {
@@ -261,6 +290,7 @@ struct ControlButtonsSection: View {
                         )
                 }
                 .shadow(radius: 5)
+                .disabled(store.withState(\.isSaving))
             }
         }
     }

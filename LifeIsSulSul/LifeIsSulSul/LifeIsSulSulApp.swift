@@ -7,11 +7,18 @@
 
 import SwiftUI
 import ComposableArchitecture
+import ActivityKit
+import WidgetKit
+
 
 @main
 struct LifeIsSulSulApp: App {
-    @AppStorage("hasSeenOnboarding") var hasSeenOnboarding = false
     
+    init() {
+        // Widget 등록
+            WidgetCenter.shared.reloadAllTimelines()
+        
+    }
     var body: some Scene {
         WindowGroup {
             AppView(store: Store(initialState: AppFeature.State()) {
@@ -23,17 +30,38 @@ struct LifeIsSulSulApp: App {
 
 struct AppView: View {
     @Bindable var store: StoreOf<AppFeature>
+    @Environment(\.scenePhase) private var scenePhase
+    @StateObject private var intentHandler = LiveActivityIntentHandler()
+    @StateObject private var permissionManager = LiveActivityPermissionManager()
     
     var body: some View {
-        switch store.appState {
-        case .splash:
-            SplashView(store: store.scope(state: \.splashState, action: \.splashAction))
+        Group {
+            switch store.appState {
+            case .splash:
+                SplashView(store: store.scope(state: \.splashState, action: \.splashAction))
+                
+            case .onboarding:
+                OnboardingView(store: store.scope(state: \.onboardingState, action: \.onboardingAction))
+                
+            case .main:
+                DrinkTrackingView(store: store.scope(state: \.drinkTrackingState, action: \.drinkTrackingAction))
+            }
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            store.send(.drinkTrackingAction(.scenePhaseChanged(newPhase)))
+        }
+        .onAppear {
+                intentHandler.setStore(store.scope(state: \.drinkTrackingState, action: \.drinkTrackingAction))
+                permissionManager.checkPermissionStatus()
             
-        case .onboarding:
-            OnboardingView(store: store.scope(state: \.onboardingState, action: \.onboardingAction))
-            
-        case .main:
-            DrinkTrackingView(store: store.scope(state: \.drinkTrackingState, action: \.drinkTrackingAction))
+        }
+        .alert("Live Activities 설정", isPresented: $permissionManager.showSettingsAlert) {
+            Button("설정으로 이동") {
+                permissionManager.openSettings()
+            }
+            Button("나중에", role: .cancel) { }
+        } message: {
+            Text("잠금화면에서 음주 타이머를 보려면 Live Activities를 활성화해주세요.\n\n설정 > 알림 > LifeIsSulSul > Live Activities")
         }
     }
 }

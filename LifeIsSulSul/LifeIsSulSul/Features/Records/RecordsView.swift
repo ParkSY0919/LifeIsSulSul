@@ -2,7 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct RecordView: View {
-    let store: StoreOf<RecordsFeature>
+    @Bindable var store: StoreOf<RecordsFeature>
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -13,10 +13,10 @@ struct RecordView: View {
                               endPoint: .bottomTrailing)
                     .ignoresSafeArea()
                 
-                if store.withState(\.isLoading) {
+                if store.isLoading {
                     ProgressView()
                         .scaleEffect(1.2)
-                } else if store.withState(\.records.isEmpty) {
+                } else if store.records.isEmpty {
                     VStack {
                         Image(systemName: "wineglass")
                             .font(.system(size: 80))
@@ -38,7 +38,7 @@ struct RecordView: View {
                                     }) {
                                         HStack {
                                             Text(order.rawValue)
-                                            if store.withState(\.sortOrder) == order {
+                                            if store.sortOrder == order {
                                                 Image(systemName: "checkmark")
                                             }
                                         }
@@ -46,7 +46,7 @@ struct RecordView: View {
                                 }
                             } label: {
                                 HStack(spacing: 4) {
-                                    Text(store.withState(\.sortOrder.rawValue))
+                                    Text(store.sortOrder.rawValue)
                                         .font(.caption)
                                     Image(systemName: "chevron.down")
                                         .font(.caption)
@@ -64,7 +64,7 @@ struct RecordView: View {
                         
                         ScrollView {
                             VStack(spacing: 16) {
-                                let sortedRecords = store.withState(\.sortedRecords)
+                                let sortedRecords = store.sortedRecords
                                 ForEach(sortedRecords.indices, id: \.self) { index in
                                     RecordCard(record: sortedRecords[index])
                                 }
@@ -87,6 +87,7 @@ struct RecordView: View {
                 }
             }
             .onAppear {
+                print("🎯 RecordsView - onAppear 호출됨")
                 store.send(.loadRecords)
             }
         }

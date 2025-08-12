@@ -8,16 +8,76 @@
 
 /* Begin PBXBuildFile section */
 		9E47133A2E437A3B0000CF24 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 9E4713392E437A3B0000CF24 /* ComposableArchitecture */; };
+		9E47189F2E44ABB00000CF24 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E47189E2E44ABB00000CF24 /* WidgetKit.framework */; };
+		9E4718A12E44ABB00000CF24 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E4718A02E44ABB00000CF24 /* SwiftUI.framework */; };
+		9E4718AC2E44ABB20000CF24 /* LifeIsSulSulWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 9E47189C2E44ABB00000CF24 /* LifeIsSulSulWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9E4718AA2E44ABB20000CF24 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9E4710642E4210890000CF24 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9E47189B2E44ABB00000CF24;
+			remoteInfo = LifeIsSulSulWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9E4718B12E44ABB20000CF24 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				9E4718AC2E44ABB20000CF24 /* LifeIsSulSulWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		9E47106C2E4210890000CF24 /* LifeIsSulSul.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LifeIsSulSul.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E47189C2E44ABB00000CF24 /* LifeIsSulSulWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LifeIsSulSulWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E47189E2E44ABB00000CF24 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		9E4718A02E44ABB00000CF24 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		9E4719B82E44CE9B0000CF24 /* LifeIsSulSulWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LifeIsSulSulWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		9E4718AD2E44ABB20000CF24 /* Exceptions for "LifeIsSulSulWidget" folder in "LifeIsSulSulWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 9E47189B2E44ABB00000CF24 /* LifeIsSulSulWidgetExtension */;
+		};
+		9E4719BC2E456BDB0000CF24 /* Exceptions for "LifeIsSulSul" folder in "LifeIsSulSulWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				DrinkingTimerModels.swift,
+				SharedDataManager.swift,
+			);
+			target = 9E47189B2E44ABB00000CF24 /* LifeIsSulSulWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		9E47106E2E4210890000CF24 /* LifeIsSulSul */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9E4719BC2E456BDB0000CF24 /* Exceptions for "LifeIsSulSul" folder in "LifeIsSulSulWidgetExtension" target */,
+			);
 			path = LifeIsSulSul;
+			sourceTree = "<group>";
+		};
+		9E4718A22E44ABB00000CF24 /* LifeIsSulSulWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9E4718AD2E44ABB20000CF24 /* Exceptions for "LifeIsSulSulWidget" folder in "LifeIsSulSulWidgetExtension" target */,
+			);
+			path = LifeIsSulSulWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -31,13 +91,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9E4718992E44ABB00000CF24 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9E4718A12E44ABB00000CF24 /* SwiftUI.framework in Frameworks */,
+				9E47189F2E44ABB00000CF24 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		9E4710632E4210890000CF24 = {
 			isa = PBXGroup;
 			children = (
+				9E4719B82E44CE9B0000CF24 /* LifeIsSulSulWidgetExtension.entitlements */,
 				9E47106E2E4210890000CF24 /* LifeIsSulSul */,
+				9E4718A22E44ABB00000CF24 /* LifeIsSulSulWidget */,
+				9E47189D2E44ABB00000CF24 /* Frameworks */,
 				9E47106D2E4210890000CF24 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -46,8 +118,18 @@
 			isa = PBXGroup;
 			children = (
 				9E47106C2E4210890000CF24 /* LifeIsSulSul.app */,
+				9E47189C2E44ABB00000CF24 /* LifeIsSulSulWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		9E47189D2E44ABB00000CF24 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9E47189E2E44ABB00000CF24 /* WidgetKit.framework */,
+				9E4718A02E44ABB00000CF24 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -60,10 +142,12 @@
 				9E4710682E4210890000CF24 /* Sources */,
 				9E4710692E4210890000CF24 /* Frameworks */,
 				9E47106A2E4210890000CF24 /* Resources */,
+				9E4718B12E44ABB20000CF24 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				9E4718AB2E44ABB20000CF24 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				9E47106E2E4210890000CF24 /* LifeIsSulSul */,
@@ -76,6 +160,28 @@
 			productReference = 9E47106C2E4210890000CF24 /* LifeIsSulSul.app */;
 			productType = "com.apple.product-type.application";
 		};
+		9E47189B2E44ABB00000CF24 /* LifeIsSulSulWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9E4718AE2E44ABB20000CF24 /* Build configuration list for PBXNativeTarget "LifeIsSulSulWidgetExtension" */;
+			buildPhases = (
+				9E4718982E44ABB00000CF24 /* Sources */,
+				9E4718992E44ABB00000CF24 /* Frameworks */,
+				9E47189A2E44ABB00000CF24 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				9E4718A22E44ABB00000CF24 /* LifeIsSulSulWidget */,
+			);
+			name = LifeIsSulSulWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = LifeIsSulSulWidgetExtension;
+			productReference = 9E47189C2E44ABB00000CF24 /* LifeIsSulSulWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -87,6 +193,9 @@
 				LastUpgradeCheck = 1610;
 				TargetAttributes = {
 					9E47106B2E4210890000CF24 = {
+						CreatedOnToolsVersion = 16.1;
+					};
+					9E47189B2E44ABB00000CF24 = {
 						CreatedOnToolsVersion = 16.1;
 					};
 				};
@@ -109,12 +218,20 @@
 			projectRoot = "";
 			targets = (
 				9E47106B2E4210890000CF24 /* LifeIsSulSul */,
+				9E47189B2E44ABB00000CF24 /* LifeIsSulSulWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		9E47106A2E4210890000CF24 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9E47189A2E44ABB00000CF24 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -131,7 +248,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9E4718982E44ABB00000CF24 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9E4718AB2E44ABB20000CF24 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9E47189B2E44ABB00000CF24 /* LifeIsSulSulWidgetExtension */;
+			targetProxy = 9E4718AA2E44ABB20000CF24 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		9E4710782E42108B0000CF24 /* Debug */ = {
@@ -258,18 +390,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LifeIsSulSul/LifeIsSulSul.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"LifeIsSulSul/Preview Content\"";
 				DEVELOPMENT_TEAM = A95XXD5WT7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UIBackgroundModes = "background-processing background-app-refresh";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -292,18 +427,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LifeIsSulSul/LifeIsSulSul.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"LifeIsSulSul/Preview Content\"";
 				DEVELOPMENT_TEAM = A95XXD5WT7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UIBackgroundModes = "background-processing background-app-refresh";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -315,6 +453,64 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		9E4718AF2E44ABB20000CF24 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = LifeIsSulSulWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A95XXD5WT7;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LifeIsSulSulWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LifeIsSulSulWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.psy.LifeIsSulSul.LifeIsSulSulWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		9E4718B02E44ABB20000CF24 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = LifeIsSulSulWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A95XXD5WT7;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LifeIsSulSulWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LifeIsSulSulWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.psy.LifeIsSulSul.LifeIsSulSulWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -338,6 +534,15 @@
 			buildConfigurations = (
 				9E47107B2E42108B0000CF24 /* Debug */,
 				9E47107C2E42108B0000CF24 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9E4718AE2E44ABB20000CF24 /* Build configuration list for PBXNativeTarget "LifeIsSulSulWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9E4718AF2E44ABB20000CF24 /* Debug */,
+				9E4718B02E44ABB20000CF24 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

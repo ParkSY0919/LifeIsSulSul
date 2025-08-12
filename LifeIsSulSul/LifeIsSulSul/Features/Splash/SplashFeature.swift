@@ -2,10 +2,12 @@ import SwiftUI
 import ComposableArchitecture
 
 struct SplashFeature: Reducer {
+    @ObservableState
     struct State: Equatable {
         var showOnboarding = false
     }
     
+    @CasePathable
     enum Action {
         case onAppear
         case showOnboarding

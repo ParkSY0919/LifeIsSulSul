@@ -2,7 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct SplashView: View {
-    let store: StoreOf<SplashFeature>
+    @Bindable var store: StoreOf<SplashFeature>
     
     var body: some View {
             ZStack {
@@ -22,7 +22,7 @@ struct SplashView: View {
                                 .frame(width: 100, height: 100)
                                 .clipShape(RoundedRectangle(cornerRadius: 15))
                         )
-                        .scaleEffect(store.withState(\.showOnboarding) ? 1.2 : 1.0)
+                        .scaleEffect(store.showOnboarding ? 1.2 : 1.0)
                         .shadow(radius: 10)
                     
                     Text("인생이 술술")
@@ -31,8 +31,8 @@ struct SplashView: View {
                         .foregroundColor(.white)
                         .padding(.top, 20)
                 }
-                .scaleEffect(store.withState(\.showOnboarding) ? 0 : 1)
-                .opacity(store.withState(\.showOnboarding) ? 0 : 1)
+                .scaleEffect(store.showOnboarding ? 0 : 1)
+                .opacity(store.showOnboarding ? 0 : 1)
             }
             .onAppear {
                 store.send(.onAppear)
