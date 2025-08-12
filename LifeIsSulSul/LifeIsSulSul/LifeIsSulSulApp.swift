@@ -16,9 +16,8 @@ struct LifeIsSulSulApp: App {
     
     init() {
         // Widget 등록
-        if #available(iOS 16.1, *) {
             WidgetCenter.shared.reloadAllTimelines()
-        }
+        
     }
     var body: some Scene {
         WindowGroup {
@@ -52,10 +51,9 @@ struct AppView: View {
             store.send(.drinkTrackingAction(.scenePhaseChanged(newPhase)))
         }
         .onAppear {
-            if #available(iOS 16.1, *) {
                 intentHandler.setStore(store.scope(state: \.drinkTrackingState, action: \.drinkTrackingAction))
                 permissionManager.checkPermissionStatus()
-            }
+            
         }
         .alert("Live Activities 설정", isPresented: $permissionManager.showSettingsAlert) {
             Button("설정으로 이동") {

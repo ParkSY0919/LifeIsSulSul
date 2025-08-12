@@ -9,6 +9,39 @@ class DrinkingTimerActivityManager: ObservableObject {
     
     private init() {
         cleanupExistingActivities()
+        setupDataObserver()
+    }
+    
+    private func setupDataObserver() {
+        // SharedDataManager의 currentSession 변경 시 LiveActivity 업데이트
+        SharedDataManager.shared.onSessionChanged = { [weak self] session in
+            Task { @MainActor in
+                print("DrinkingTimerActivityManager: Session changed, updating LiveActivity")
+                await self?.updateActivityFromSession(session)
+            }
+        }
+        
+        print("DrinkingTimerActivityManager: Session observer setup completed")
+    }
+    
+    private func updateActivityFromSession(_ session: DrinkingSession) async {
+        guard currentActivity != nil else {
+            print("DrinkingTimerActivityManager: No active LiveActivity to update")
+            return
+        }
+        
+        print("DrinkingTimerActivityManager: Updating LiveActivity with session - Soju: \(session.sojuBottles)병 \(session.sojuShots % 8)잔, Beer: \(session.beerBottles)병 \(session.beerGlasses % 4)잔, Somaek: \(session.somaekGlasses)잔")
+        
+        await updateActivity(
+            isActive: session.isTracking,
+            isPaused: session.isPaused,
+            elapsedTime: session.elapsedTime,
+            sojuBottles: session.sojuBottles,
+            sojuShots: session.sojuShots % 8,
+            beerBottles: session.beerBottles,
+            beerGlasses: session.beerGlasses % 4,
+            somaekGlasses: session.somaekGlasses
+        )
     }
     
     private func cleanupExistingActivities() {
@@ -19,19 +52,16 @@ class DrinkingTimerActivityManager: ObservableObject {
         }
     }
     
-    func startActivity(sessionStartTime: Date, userName: String? = nil) {
+    func startActivity(sessionStartTime: Date, userName: String? = nil) async {
         guard ActivityAuthorizationInfo().areActivitiesEnabled else {
             print("Live Activities are not enabled")
             return
         }
         
-        // 기존 Activity가 있다면 종료
         if let existingActivity = currentActivity {
-            Task {
-                await existingActivity.end(nil, dismissalPolicy: .immediate)
-                await MainActor.run {
-                    self.currentActivity = nil
-                }
+            await existingActivity.end(nil, dismissalPolicy: .immediate)
+            await MainActor.run {
+                self.currentActivity = nil
             }
         }
         
@@ -79,7 +109,10 @@ class DrinkingTimerActivityManager: ObservableObject {
         somaekGlasses: Int,
         currentHourlyPace: String = "보통"
     ) async {
-        guard let activity = currentActivity else { return }
+        guard let activity = currentActivity else { 
+            print("DrinkingTimerActivityManager: updateActivity called but no current activity")
+            return 
+        }
         
         let contentState = DrinkingTimerContentState(
             isActive: isActive,
@@ -98,8 +131,9 @@ class DrinkingTimerActivityManager: ObservableObject {
         
         do {
             await activity.update(activityContent)
+            print("DrinkingTimerActivityManager: LiveActivity updated successfully")
         } catch {
-            print("Failed to update Live Activity: \(error)")
+            print("DrinkingTimerActivityManager: Failed to update LiveActivity: \(error)")
         }
     }
     

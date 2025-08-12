@@ -2,6 +2,10 @@ import Foundation
 import ActivityKit
 import SwiftUI
 
+// MARK: - 중복 정의 - 본 앱 모듈 (DrinkingTimerModels.swift)에서 정의된 타입들을 사용해야 함
+// Widget Extension은 본 앱의 타입을 import해서 사용해야 하므로 이 정의들은 주석 처리
+
+/*
 struct DrinkingTimerActivity: ActivityAttributes {
     public typealias ContentState = DrinkingTimerContentState
     
@@ -78,4 +82,5 @@ struct DrinkingTimerContentState: Sendable, Codable, Hashable {
         return drinks.isEmpty ? "음주 기록 없음" : drinks.joined(separator: ", ")
     }
 }
+*/
 

@@ -4,6 +4,82 @@ import ActivityKit
 import AppIntents
 import SwiftUI
 
+// MARK: - Widget Data Manager (Self-contained for Widget Extension)
+@MainActor
+class WidgetDataManager {
+    static let shared = WidgetDataManager()
+    private let suiteName = "group.LifeIsSulSul"
+    private var userDefaults: UserDefaults
+    
+    private init() {
+        userDefaults = UserDefaults(suiteName: suiteName) ?? UserDefaults.standard
+    }
+    
+    func addSoju() {
+        guard userDefaults.bool(forKey: "SharedData_isTracking") else { return }
+        let currentShots = userDefaults.integer(forKey: "SharedData_sojuShots")
+        let currentBottles = userDefaults.integer(forKey: "SharedData_sojuBottles")
+        
+        let newShots = currentShots + 1
+        let newBottles = currentBottles + (newShots / 8)
+        let remainingShots = newShots % 8
+        
+        userDefaults.set(newBottles, forKey: "SharedData_sojuBottles")
+        userDefaults.set(remainingShots, forKey: "SharedData_sojuShots")
+        userDefaults.set(Date(), forKey: "SharedData_lastUpdateTime")
+        userDefaults.synchronize()
+        
+        print("WidgetDataManager: Added soju - \(newBottles)병 \(remainingShots)잔")
+    }
+    
+    func addBeer() {
+        guard userDefaults.bool(forKey: "SharedData_isTracking") else { return }
+        let currentGlasses = userDefaults.integer(forKey: "SharedData_beerGlasses")
+        let currentBottles = userDefaults.integer(forKey: "SharedData_beerBottles")
+        
+        let newGlasses = currentGlasses + 1
+        let newBottles = currentBottles + (newGlasses / 4)
+        let remainingGlasses = newGlasses % 4
+        
+        userDefaults.set(newBottles, forKey: "SharedData_beerBottles")
+        userDefaults.set(remainingGlasses, forKey: "SharedData_beerGlasses")
+        userDefaults.set(Date(), forKey: "SharedData_lastUpdateTime")
+        userDefaults.synchronize()
+        
+        print("WidgetDataManager: Added beer - \(newBottles)병 \(remainingGlasses)잔")
+    }
+    
+    func addSomaek() {
+        guard userDefaults.bool(forKey: "SharedData_isTracking") else { return }
+        let currentGlasses = userDefaults.integer(forKey: "SharedData_somaekGlasses")
+        let newGlasses = currentGlasses + 1
+        
+        userDefaults.set(newGlasses, forKey: "SharedData_somaekGlasses")
+        userDefaults.set(Date(), forKey: "SharedData_lastUpdateTime")
+        userDefaults.synchronize()
+        
+        print("WidgetDataManager: Added somaek - \(newGlasses)잔")
+    }
+    
+    func toggleTimer() {
+        let isTracking = userDefaults.bool(forKey: "SharedData_isTracking")
+        let isPaused = userDefaults.bool(forKey: "SharedData_isPaused")
+        
+        if isTracking {
+            userDefaults.set(false, forKey: "SharedData_isTracking")
+            userDefaults.set(true, forKey: "SharedData_isPaused")
+        } else if isPaused {
+            userDefaults.set(true, forKey: "SharedData_isTracking")
+            userDefaults.set(false, forKey: "SharedData_isPaused")
+        }
+        
+        userDefaults.set(Date(), forKey: "SharedData_lastUpdateTime")
+        userDefaults.synchronize()
+        
+        print("WidgetDataManager: Toggled timer - isTracking: \(!isTracking), isPaused: \(!isPaused)")
+    }
+}
+
 // MARK: - Toggle Timer Intent (Pause/Resume)
 struct DrinkingTimerToggleIntent: LiveActivityIntent {
     static let title: LocalizedStringResource = "음주 타이머 일시정지/재시작"
@@ -11,7 +87,10 @@ struct DrinkingTimerToggleIntent: LiveActivityIntent {
     static let authenticationPolicy: IntentAuthenticationPolicy = .alwaysAllowed
     
     func perform() async throws -> some IntentResult {
-        NotificationCenter.default.post(name: .toggleDrinkingTimer, object: nil)
+        await MainActor.run {
+            print("DrinkingTimerToggleIntent: Toggling timer state")
+            WidgetDataManager.shared.toggleTimer()
+        }
         return .result()
     }
 }
@@ -24,7 +103,10 @@ struct AddSojuIntent: LiveActivityIntent {
     static let authenticationPolicy: IntentAuthenticationPolicy = .alwaysAllowed
     
     func perform() async throws -> some IntentResult {
-        NotificationCenter.default.post(name: .addSoju, object: nil)
+        await MainActor.run {
+            print("AddSojuIntent: Adding soju shot")
+            WidgetDataManager.shared.addSoju()
+        }
         return .result()
     }
 }
@@ -36,7 +118,10 @@ struct AddBeerIntent: LiveActivityIntent {
     static let authenticationPolicy: IntentAuthenticationPolicy = .alwaysAllowed
     
     func perform() async throws -> some IntentResult {
-        NotificationCenter.default.post(name: .addBeer, object: nil)
+        await MainActor.run {
+            print("AddBeerIntent: Adding beer glass")
+            WidgetDataManager.shared.addBeer()
+        }
         return .result()
     }
 }
@@ -48,7 +133,10 @@ struct AddSomaekIntent: LiveActivityIntent {
     static let authenticationPolicy: IntentAuthenticationPolicy = .alwaysAllowed
     
     func perform() async throws -> some IntentResult {
-        NotificationCenter.default.post(name: .addSomaek, object: nil)
+        await MainActor.run {
+            print("AddSomaekIntent: Adding somaek glass")
+            WidgetDataManager.shared.addSomaek()
+        }
         return .result()
     }
 }
@@ -75,12 +163,8 @@ struct OpenAppIntent: LiveActivityIntent {
     }
 }
 
-// MARK: - Notification Names
+// MARK: - Notification Names (deprecated - now using SharedDataManager)
 extension Notification.Name {
-    static let toggleDrinkingTimer = Notification.Name("toggleDrinkingTimer")
-    static let addSoju = Notification.Name("addSoju")
-    static let addBeer = Notification.Name("addBeer")
-    static let addSomaek = Notification.Name("addSomaek")
     static let saveRecord = Notification.Name("saveRecord")
 }
 
@@ -100,12 +184,8 @@ class LiveActivityPermissionManager: ObservableObject {
     }
     
     func requestPermission() {
-//        Task {
-            let authInfo = ActivityAuthorizationInfo()
-//            await MainActor.run {
-                self.isEnabled = authInfo.areActivitiesEnabled
-                self.hasRequestedPermission = true
-//            }
-//        }
+        let authInfo = ActivityAuthorizationInfo()
+        self.isEnabled = authInfo.areActivitiesEnabled
+        self.hasRequestedPermission = true
     }
 }

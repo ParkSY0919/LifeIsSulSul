@@ -42,6 +42,7 @@
 		9E47189C2E44ABB00000CF24 /* LifeIsSulSulWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LifeIsSulSulWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E47189E2E44ABB00000CF24 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		9E4718A02E44ABB00000CF24 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		9E4719B82E44CE9B0000CF24 /* LifeIsSulSulWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LifeIsSulSulWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -52,11 +53,22 @@
 			);
 			target = 9E47189B2E44ABB00000CF24 /* LifeIsSulSulWidgetExtension */;
 		};
+		9E4719BC2E456BDB0000CF24 /* Exceptions for "LifeIsSulSul" folder in "LifeIsSulSulWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				DrinkingTimerModels.swift,
+				SharedDataManager.swift,
+			);
+			target = 9E47189B2E44ABB00000CF24 /* LifeIsSulSulWidgetExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		9E47106E2E4210890000CF24 /* LifeIsSulSul */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9E4719BC2E456BDB0000CF24 /* Exceptions for "LifeIsSulSul" folder in "LifeIsSulSulWidgetExtension" target */,
+			);
 			path = LifeIsSulSul;
 			sourceTree = "<group>";
 		};
@@ -94,6 +106,7 @@
 		9E4710632E4210890000CF24 = {
 			isa = PBXGroup;
 			children = (
+				9E4719B82E44CE9B0000CF24 /* LifeIsSulSulWidgetExtension.entitlements */,
 				9E47106E2E4210890000CF24 /* LifeIsSulSul */,
 				9E4718A22E44ABB00000CF24 /* LifeIsSulSulWidget */,
 				9E47189D2E44ABB00000CF24 /* Frameworks */,
@@ -377,6 +390,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LifeIsSulSul/LifeIsSulSul.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"LifeIsSulSul/Preview Content\"";
@@ -413,6 +427,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LifeIsSulSul/LifeIsSulSul.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"LifeIsSulSul/Preview Content\"";
@@ -449,6 +464,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = LifeIsSulSulWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = A95XXD5WT7;
@@ -477,6 +493,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = LifeIsSulSulWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = A95XXD5WT7;
